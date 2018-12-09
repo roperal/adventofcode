@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class Day3 {
 
     public static final int INCHES = 1000;
@@ -5,34 +7,41 @@ public class Day3 {
     private static final String COMMA = ",";
     private static final String COLON = ": ";
     private static final String X = "x";
+    private static final String POINT = ".";
 
     public String[][] init() {
         String[][] piece = new String[INCHES][INCHES];
         for (int i = 0; i < Day3.INCHES; i++) {
             for (int j = 0; j < Day3.INCHES; j++) {
-                piece[i][j] = ".";
+                piece[i][j] = POINT;
             }
         }
         return piece;
     }
 
-    public String[][] drawClaim(String claim) {
+    public String[][] drawClaim(List<String> claims) {
         String[][] piece = init();
 
-        String id = getId(claim).replace("#", "");
-        String claimPiece = getClaimPiece(claim);
-        Integer inchesFromTheLeft = getInchesFromTheLeft(claimPiece);
-        String restOfClaim = getRestOfClaim(claimPiece);
-        Integer inchesFromTheTop = getInchesFromTheTop(restOfClaim);
-        String rectangle = getRectangle(restOfClaim);
-        Integer wide = getWide(rectangle);
-        Integer tall = getTall(rectangle);
+        for (String claim : claims) {
+            String id = getId(claim).replace("#", "");
+            String claimPiece = getClaimPiece(claim);
+            Integer inchesFromTheLeft = getInchesFromTheLeft(claimPiece);
+            String restOfClaim = getRestOfClaim(claimPiece);
+            Integer inchesFromTheTop = getInchesFromTheTop(restOfClaim);
+            String rectangle = getRectangle(restOfClaim);
+            Integer wide = getWide(rectangle);
+            Integer tall = getTall(rectangle);
 
-        for (int i = 0; i < Day3.INCHES; i++) {
-            for (int j = 0; j < Day3.INCHES; j++) {
-                if (getRowValueWithClaim(inchesFromTheTop, tall, i)
-                    && getColumnValueWithClaim(inchesFromTheLeft, wide, j)) {
-                    piece[i][j] = id;
+            for (int i = 0; i < Day3.INCHES; i++) {
+                for (int j = 0; j < Day3.INCHES; j++) {
+                    if (getRowValueWithClaim(inchesFromTheTop, tall, i)
+                        && getColumnValueWithClaim(inchesFromTheLeft, wide, j)) {
+                        if (!piece[i][j].equals(POINT)) {
+                            piece[i][j] = X;
+                        } else {
+                            piece[i][j] = id;
+                        }
+                    }
                 }
             }
         }
